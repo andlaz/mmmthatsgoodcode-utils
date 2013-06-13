@@ -38,13 +38,30 @@ public class RiggedRand<T> {
 	private final int MAX_RAND = 100;
 	private int chanceSum = 100;
 	
+	public synchronized RiggedRand<T> add(Participant<T> participant) throws ParticipantDistributionException {
+		
+		if (chanceSum-participant.getChance() < 0) throw new ParticipantDistributionException();
+		chanceSum -= participant.getChance();
+		
+		participants.add(participant);
+		
+		return this;
+	}
+	
 	public synchronized RiggedRand<T> add(int chance, T participant) throws ParticipantDistributionException {
 		
-		if (chanceSum-chance < 0) throw new ParticipantDistributionException();
-		chanceSum -= chance;
+		return this.add(new Participant<T>(chance, participant));
 		
-		if (participants.size() > 1 && participants.get(participants.size()-1).getChance() > chance) participants.add(new Participant<T>(chance, participant));
-		else participants.add(new Participant<T>(chance, participant));
+	}
+	
+	public synchronized RiggedRand<T> add(Participant...participants) throws ParticipantDistributionException {
+		
+		for (Participant participant:participants) {
+			
+			this.add(participant);
+			
+		}
+		
 		
 		return this;
 		
