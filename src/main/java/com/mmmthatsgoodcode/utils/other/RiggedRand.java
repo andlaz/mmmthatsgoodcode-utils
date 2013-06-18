@@ -13,7 +13,7 @@ public class RiggedRand<T> {
 		
 	}
 
-	private class Participant<T> {
+	public static class Participant<T> {
 		
 		private int chance = 100;
 		private T winner;
