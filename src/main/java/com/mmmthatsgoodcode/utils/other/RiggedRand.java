@@ -1,21 +1,13 @@
 package com.mmmthatsgoodcode.utils.other;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.TreeMap;
 
 public class RiggedRand<T> {
 
-	@SuppressWarnings("serial")
-	public static class ParticipantDistributionException extends Exception  {
-
-		
-	}
-
 	public static class Participant<T> {
 		
-		private int chance = 100;
+		private int chance = 1;
 		private T winner;
 		
 		public Participant(int chance, T winner) {
@@ -35,26 +27,25 @@ public class RiggedRand<T> {
 	}
 
 	private List<Participant<T>> participants = new ArrayList<Participant<T>>();
-	private final int MAX_RAND = 100;
-	private int chanceSum = 100;
+	private int chanceSum = 0;
 	
-	public synchronized RiggedRand<T> add(Participant<T> participant) throws ParticipantDistributionException {
+	public synchronized RiggedRand<T> add(Participant<T> participant) {
 		
-		if (chanceSum-participant.getChance() < 0) throw new ParticipantDistributionException();
-		chanceSum -= participant.getChance();
+		if (participant.getChance() <= 0) throw new IllegalArgumentException();
+		chanceSum += participant.getChance();
 		
 		participants.add(participant);
 		
 		return this;
 	}
 	
-	public synchronized RiggedRand<T> add(int chance, T participant) throws ParticipantDistributionException {
+	public synchronized RiggedRand<T> add(int chance, T participant) {
 		
 		return this.add(new Participant<T>(chance, participant));
 		
 	}
 	
-	public synchronized RiggedRand<T> add(Participant...participants) throws ParticipantDistributionException {
+	public synchronized RiggedRand<T> add(Participant...participants) {
 		
 		for (Participant participant:participants) {
 			
@@ -68,25 +59,21 @@ public class RiggedRand<T> {
 	}
 	
 
-	public T shuffle() throws ParticipantDistributionException {
-		if (chanceSum != 0) throw new ParticipantDistributionException();
+	public T shuffle() {
 		
-		int luckyNumber = 1 + (int)(Math.random() * (MAX_RAND-1));
+		int luckyNumber = 1 + (int)(Math.random() * (chanceSum-1));
+		int eliminated = 0;
 		// create list of store orders by weight
-		int min = MAX_RAND;
 		for (Participant<T> participant:participants) {
-			if (luckyNumber > (min-participant.getChance())) return participant.getWinner();
-			min -= participant.getChance();
+			if (luckyNumber <= (participant.getChance())+eliminated) return participant.getWinner();
+			eliminated += participant.getChance();
 
 		}
 		
-		throw new ParticipantDistributionException(); // impossible
+		throw new IllegalStateException(); // impossible
 
 	}
-	
-	public boolean full() {
-		return chanceSum == 0;
-	}	
+
 	
 	
 }
