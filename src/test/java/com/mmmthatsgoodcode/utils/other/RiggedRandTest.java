@@ -9,25 +9,11 @@ import java.util.Map.Entry;
 import org.junit.Test;
 
 import com.mmmthatsgoodcode.utils.other.RiggedRand;
-import com.mmmthatsgoodcode.utils.other.RiggedRand.ParticipantDistributionException;
 
 public class RiggedRandTest {
-
-
-	@Test(expected=ParticipantDistributionException.class)
-	public void testAddDoesNotAllowOverflow() throws ParticipantDistributionException {
-		
-		new RiggedRand<String>().add(10, "foo").add(91, "bar");
-	
-	}
-	
-	@Test(expected=ParticipantDistributionException.class)
-	public void testDoesNotShuffleBeforeFull() throws ParticipantDistributionException {
-		new RiggedRand<String>().add(10, "foo").add(1, "bar").shuffle();
-	}
 	
 	@Test
-	public void testAccuracy() throws ParticipantDistributionException {
+	public void testAccuracy() {
 		
 		final int runs = 100000;
 		final float accuracy = 0.02f; // 2% accuracy with 100k tries should be realistic
