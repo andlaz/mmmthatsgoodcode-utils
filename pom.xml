@@ -8,7 +8,22 @@
 	<packaging>jar</packaging>
 
 	<name>mmmthatsgoodcode-utils</name>
-	<url>http://maven.apache.org</url>
+	<url>http://mmmthatsgoodcode.com</url>
+
+	<repositories>
+		<repository>
+			<id>release</id>
+			<url>http://build.mmmthatsgoodcode.com:28080/nexus/content/repositories/releases/</url>
+		</repository>
+		<repository>
+			<id>snapshot</id>
+			<url>http://build.mmmthatsgoodcode.com:28080/nexus/content/repositories/snapshots/</url>
+		</repository>
+		<repository>
+			<id>central</id>
+			<url>http://build.mmmthatsgoodcode.com:28080/nexus/content/repositories/central/</url>
+		</repository>
+	</repositories>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -22,20 +37,6 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-
-	<distributionManagement>
-		<repository>
-			<id>mmmthatsgoodcode</id>
-			<name>MMMThatsGoodCode</name>
-			<url>http://build.mmmthatsgoodcode.com:28080/nexus/content/repositories/releases/</url>
-		</repository>
-		<snapshotRepository>
-			<id>mmmthatsgoodcode</id>
-			<name>MMMThatsGoodCode</name>
-			<url>http://build.mmmthatsgoodcode.com:28080/nexus/content/repositories/snapshots/</url>
-		</snapshotRepository>
-	</distributionManagement>
-
 	<build>
 		<pluginManagement>
 			<plugins>
